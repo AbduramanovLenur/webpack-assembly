@@ -1,0 +1,17 @@
+/*!***********************************************************************************************************!*\
+  !*** css ../node_modules/css-loader/dist/cjs.js!../node_modules/sass-loader/dist/cjs.js!./scss/main.scss ***!
+  \***********************************************************************************************************/
+@font-face {
+  font-family: "Roboto";
+  src: url(a8d6ac03c7b96b7acb62.ttf) format("truetype"); }
+
+body {
+  font-family: "Roboto"; }
+
+h1 {
+  font-size: 60px;
+  color: #0059ff; }
+
+.logo {
+  background-image: url(47692505d122dbcae490.png); }
+

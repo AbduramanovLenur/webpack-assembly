@@ -1,0 +1,16 @@
+@import "./fonts.scss";
+
+$black: #0059ff;
+
+body {
+    font-family: "Roboto";
+}
+
+h1 {
+    font-size: 60px;
+    color: $black;
+}
+
+.logo {
+    background-image: url('../assets/images/webpack-logo.png');
+}

@@ -1,6 +1,7 @@
 import cart from '@/js/modules/cart';
-import '@/styles/style';
+import "@/scss/main";
 
-console.log(235);
+const obj = 245;
 
+console.log(obj);
 cart();
