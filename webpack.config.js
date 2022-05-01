@@ -1,4 +1,5 @@
 
+const webpack = require('webpack');
 const path = require("path");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
@@ -10,7 +11,7 @@ const TerserWebpackPlugin = require("terser-webpack-plugin");
 const isDev = process.env.NODE_ENV === "development";
 const isProd = !isDev;
 
-const filename = ext => isDev ? `[name].${ext}` : `[name].[hash].${ext}`;
+// const filename = ext => isDev ? `[name].${ext}` : `[name].[hash].${ext}`;
 
 const optimization = () => {
     const config = {
@@ -34,7 +35,15 @@ const cssLoaders = (extra) => {
         {
             loader: MiniCssExtractPlugin.loader
         },
-        "css-loader"
+        "css-loader",
+        {
+            loader: 'postcss-loader',
+            options: {
+                postcssOptions: {
+                    config: path.resolve(__dirname, 'postcss.config.js'),
+                }
+            },
+        }
     ];
 
     if (extra) {
@@ -53,8 +62,9 @@ module.exports = {
         //тут можно добавлять стороние файлы, которые не относятся к основному файлу JS,
     },
     output: {
-        filename: filename('js'),
-        path: path.resolve(__dirname, "dist")
+        filename: `[name].js`,
+        path: path.resolve(__dirname, "dist"),
+        // assetModuleFilename: 'assets/images/[name][ext]'
     },
     resolve: {
         extensions: ['.js', '.json', '.css', '.scss', '.png', '.jpg', '.svg', '.gif', '.ejs'],
@@ -68,7 +78,11 @@ module.exports = {
         hot: isDev,
         watchFiles: "./src/*.html"
     },
+    devtool: isDev ? "source-map" : false,
     plugins: [
+        new webpack.LoaderOptionsPlugin ({
+            hashFilenames: true
+        }),
         // new CopyWebpackPlugin({
         //     patterns: [
         //         {
@@ -86,14 +100,14 @@ module.exports = {
             }
         }),
         // new HTMLWebpackPlugin({
-        //     template: "./cart.html",
-        //     filename: "cart.html",
+        //     template: "",
+        //     filename: "",
         //     inject: "body"
         // }),
         new CleanWebpackPlugin(),
         new MiniCssExtractPlugin({
-            filename: filename("css")
-        })
+            filename: `[name].css`
+        }),
     ],
     module: {
         rules: [

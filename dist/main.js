@@ -1,11 +1,3 @@
-/*
- * ATTENTION: The "eval" devtool has been used (maybe by default in mode: "development").
- * This devtool is neither made for production nor for readable output files.
- * It uses "eval()" calls to create a separate source file in the browser devtools.
- * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
- * or disable the default devtool with "devtool: false".
- * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
- */
 /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
@@ -16,7 +8,15 @@
   \*********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _js_modules_cart__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/js/modules/cart */ \"./js/modules/cart.js\");\n/* harmony import */ var _scss_main__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/scss/main */ \"./scss/main.scss\");\n\n\nvar obj = 245;\nconsole.log(obj);\n(0,_js_modules_cart__WEBPACK_IMPORTED_MODULE_0__[\"default\"])();\n\n//# sourceURL=webpack:///./js/index.js?");
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _js_modules_cart__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/js/modules/cart */ "./js/modules/cart.js");
+/* harmony import */ var _scss_main__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/scss/main */ "./scss/main.scss");
+
+ // import '@/assets/images/download.jpg'
+
+var obj = 245;
+console.log(obj);
+(0,_js_modules_cart__WEBPACK_IMPORTED_MODULE_0__["default"])();
 
 /***/ }),
 
@@ -26,7 +26,15 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _js_
   \****************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\nvar cart = function cart() {\n  console.log(1235);\n};\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (cart);\n\n//# sourceURL=webpack:///./js/modules/cart.js?");
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var cart = function cart() {
+  console.log(1235);
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (cart);
 
 /***/ }),
 
@@ -36,7 +44,9 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
   \************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n// extracted by mini-css-extract-plugin\n\n\n//# sourceURL=webpack:///./scss/main.scss?");
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
 
 /***/ })
 
@@ -194,3 +204,4 @@ eval("__webpack_require__.r(__webpack_exports__);\n// extracted by mini-css-extr
 /******/ 	
 /******/ })()
 ;
+//# sourceMappingURL=main.js.map
