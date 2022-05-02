@@ -1,5 +1,3 @@
-
-const webpack = require('webpack');
 const path = require("path");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
@@ -7,11 +5,20 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCssAssetPlugin = require("optimize-css-assets-webpack-plugin");
 const TerserWebpackPlugin = require("terser-webpack-plugin");
+const fs = require('fs');
 
 const isDev = process.env.NODE_ENV === "development";
 const isProd = !isDev;
 
-// const filename = ext => isDev ? `[name].${ext}` : `[name].[hash].${ext}`;
+const pluginsCfg = {
+    ejs: [
+        {
+            filePath: path.resolve(__dirname, './src/pages'),
+            outputPath: './',
+            inject: "body"
+        },
+    ],
+}
 
 const optimization = () => {
     const config = {
@@ -35,7 +42,12 @@ const cssLoaders = (extra) => {
         {
             loader: MiniCssExtractPlugin.loader
         },
-        "css-loader",
+        {
+            loader: "css-loader",
+            options: {
+                url: false
+            }
+        },
         {
             loader: 'postcss-loader',
             options: {
@@ -53,21 +65,37 @@ const cssLoaders = (extra) => {
     return loaders;
 }
 
+const pages = pluginsCfg.ejs.map(({ filePath, inject, outputPath }) => {
+    const files = fs.readdirSync(filePath).filter(item => item.endsWith('.ejs'))
+    const instances = new Set()
+    files.forEach((name) => {
+        const _filePath = path.resolve(__dirname, `${filePath}/${name.split('.')[0]}.${name.split('.')[1]}`)
+        const instance = new HTMLWebpackPlugin({
+            filename: `${outputPath}/${name.split('.')[0]}.html`,
+            template: `!!ejs-compiled-loader!${_filePath}`,
+            id: name,
+            inject
+        })
+        instances.add(instance)
+    })
+    return [...instances]
+}).flat()
+
 module.exports = {
     target: process.env.NODE_ENV === "development" ? "web" : "browserslist",
     context: path.resolve(__dirname, "src"),
     mode: "development",
-    entry: {
-        main: ["@babel/polyfill", "./js/index.js"]
+    // entry: {
+        // main: ["@babel/polyfill", "./js/index.js"]
         //тут можно добавлять стороние файлы, которые не относятся к основному файлу JS,
-    },
+    // },
+    entry: './js/index.js',
     output: {
         filename: `[name].js`,
-        path: path.resolve(__dirname, "dist"),
-        // assetModuleFilename: 'assets/images/[name][ext]'
+        path: path.resolve(__dirname, "dist")
     },
     resolve: {
-        extensions: ['.js', '.json', '.css', '.scss', '.png', '.jpg', '.svg', '.gif', '.ejs'],
+        extensions: ['.js', '.json', '.css', '.pcss', '.scss', '.png', '.jpg', '.svg', '.gif', '.ejs'],
         alias: {
             "@": path.resolve(__dirname, "src")
         }
@@ -76,34 +104,19 @@ module.exports = {
     devServer: {
         port: 3000,
         hot: isDev,
-        watchFiles: "./src/*.html"
+        watchFiles: './src/**/*.ejs',
     },
     devtool: isDev ? "source-map" : false,
     plugins: [
-        new webpack.LoaderOptionsPlugin ({
-            hashFilenames: true
+        ...pages,
+        new CopyWebpackPlugin({
+            patterns: [
+                {
+                    from: path.resolve(__dirname, "src/assets"),
+                    to: path.resolve(__dirname, "dist/assets")
+                },
+            ],
         }),
-        // new CopyWebpackPlugin({
-        //     patterns: [
-        //         {
-        //             from: path.resolve(__dirname, "src/assets"),
-        //             to: path.resolve(__dirname, "dist/assets")
-        //         },
-        //     ],
-        // }),
-        new HTMLWebpackPlugin({
-            template: "./index.html",
-            filename: "index.html",
-            inject: "body",
-            minify: {
-                collapseWhitespace: isProd
-            }
-        }),
-        // new HTMLWebpackPlugin({
-        //     template: "",
-        //     filename: "",
-        //     inject: "body"
-        // }),
         new CleanWebpackPlugin(),
         new MiniCssExtractPlugin({
             filename: `[name].css`
@@ -112,20 +125,21 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.css$/i,
-                use: cssLoaders()
+                test: /\.ejs$/,
+                use: ['ejs-compiled-loader']
             },
             {
-                test: /\.s[ac]ss$/i,
-                use: cssLoaders("sass-loader")
+                test: /\.(pcss|css)$/i,
+                use: cssLoaders(),
             },
             {
-                test: /\.(png|svg|jpg|jpeg|gif)$/,
-                type: "asset/resource"
-            },
-            {
-                test: /\.(ttf|woff|woff2|eot)$/,
-                type: "asset/resource"
+                test: /\.(png|jpg|jpeg|gif|svg)($|\?)|\.woff($|\?)|\.woff2($|\?)|\.ttf($|\?)|\.eot($|\?)/,
+                use: [{
+                    loader: 'file-loader',
+                    options: {
+                        name: '[path][name].[ext]'
+                    }
+                }],
             },
             {
                 test: /\.m?js$/,

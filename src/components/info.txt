@@ -1,0 +1,1 @@
+В папке "components" пишутся различные компоненты для сайта, внутри компонента хранятся файлы (button.pcss, data.json, index.js, template.ejs)
